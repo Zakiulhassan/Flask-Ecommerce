@@ -1,0 +1,17 @@
+{% extends 'home.html' %} {% block title %}Home - E-commerce App{% endblock %}
+{% block content %}
+<h1>Product List</h1>
+<ul>
+  {% for product in products %}
+  <li>
+    <a href="{{ url_for('product_detail', product_id=product['id']) }}">
+      <img
+        src="{{ url_for('static', filename='images/' + product['image']) }}"
+        alt="{{ product['title'] }}"
+      />
+      <p>{{ product['title'] }}</p>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

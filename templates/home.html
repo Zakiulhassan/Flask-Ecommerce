@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}E-commerce App{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    {% block content %} {% if username %}
+    <h1>Welcome to our E-commerce App, {{ username }}!</h1>
+    <div class="nav-div">
+      <p><a href="{{ url_for('logout') }}">Logout</a></p>
+      <p>
+        <a class="view-cart-button" href="{{ url_for('cart') }}">View Cart</a>
+      </p>
+    </div>
+
+    {% else %}
+    <h1>Welcome to our E-commerce App</h1>
+    <div class="nav-div">
+      <p><a class="view-cart-button" href="{{ url_for('login') }}">Login</a></p>
+    </div>
+    {% endif %}
+
+    <h2>Featured Products</h2>
+    <ul>
+      {% for product in products %}
+      <li>
+        <img
+          src="{{ url_for('static', filename='images/' + product['image']) }}"
+          alt="{{ product['title'] }}"
+        />
+        <br />
+        <a href="{{ url_for('product_detail', id=product['id']) }}">
+          {{ product['title'] }}<b> ${{ product['price'] }}</b>
+        </a>
+        {% if username %}
+
+        <form
+          method="post"
+          action="{{ url_for('add_to_cart', id=product['id']) }}"
+        >
+          <input type="submit" value="Add to Cart" />
+        </form>
+
+        {% if product['id'] in session.get('cart', []) %}
+        <p>Added to Cart!</p>
+        {% endif %} {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    <!-- {% if username %}
+    <div>
+      <a class="view-cart-button" href="{{ url_for('cart') }}">View Cart</a>
+    </div>
+    {% endif %} {% endblock %} -->
+  </body>
+</html>
